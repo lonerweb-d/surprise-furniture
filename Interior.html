@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surprise Furniture</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+ body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+  header{position:fixed;top:0;left:0;width:100%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.08);z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;}
+  header h1{font-size:1.3rem;color:#222;}
+  .back-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;color:#333;transition:0.3s;}
+  .back-btn:hover{color:#0ddc06;}
+  main{padding:100px 20px 60px;max-width:1200px;margin:auto;}
+  section{margin-bottom:60px;opacity:0;transform:translateY(40px);transition:all 0.6s ease;}
+  section.visible{opacity:1;transform:translateY(0);}
+  h2{font-size:1.6rem;margin-bottom:20px;color:#94fd5f;text-align:center;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+  .item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,0.1);transition:transform 0.3s ease,box-shadow 0.3s ease;}
+  .item:hover{transform:translateY(-6px);box-shadow:0 5px 18px rgba(0,0,0,0.15);}
+  .item img{width:100%;height:180px;object-fit:cover;}
+  .info{padding:15px;text-align:center;}
+  .info h3{font-size:1.05rem;margin-bottom:10px;}
+  .info button{background:#01ab1e;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;transition:background 0.3s;}
+  .info button:hover{background:#b87f49;}
+
+  /* Floating WhatsApp */
+  .whatsapp-btn{
+    position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;
+    font-size:24px;width:55px;height:55px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;
+    z-index:20;transition:transform 0.3s;
+  }
+  .whatsapp-btn:hover{transform:scale(1.1);}
+
+  /* Modal */
+  .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:30;}
+  .modal.show{display:flex;}
+  .modal-content{background:#fff;border-radius:16px;max-width:420px;width:90%;padding:20px;position:relative;animation:pop 0.3s ease;}
+  @keyframes pop{from{transform:scale(0.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .modal-content img{width:100%;height:220px;object-fit:cover;border-radius:12px;}
+  .modal-content h3{margin:15px 0 10px;font-size:1.3rem;color:#222;}
+  .modal-content p{font-size:0.95rem;color:#555;margin-bottom:20px;}
+  .modal-content button{background:#03a919;color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:0.95rem;transition:0.3s;}
+  .modal-content button:hover{background:#b87f49;}
+  .close-modal{position:absolute;top:12px;right:15px;font-size:1.3rem;background:none;border:none;cursor:pointer;color:#555;}
+    .back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: linear-gradient(135deg, #444, #111);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+  }
+
+  .back-btn:hover {
+    transform: scale(1.1) rotate(-5deg);
+    background: linear-gradient(135deg, #ff8c00, #ff5f00);
+    box-shadow: 0 0 15px rgba(255,140,0,0.7);
+  }
+
+  /* Optional subtle bounce animation */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .back-btn:hover i {
+    animation: bounce 0.6s ease infinite;
+  }
+  /* Background video styling */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;  /* keeps it behind all content */
+  pointer-events: none; /* disables any click/pause */
+  filter: brightness(70%); /* darken slightly for text visibility */
+}
+p{ color: #111;
+float: left;
+margin-top: -38px;}
+
+
+</style>
+</head>
+<body>
+<video autoplay muted loop playsinline id="bgVideo">
+  <source src="Image/New.mp4" type="video/mp4">
+  <!-- 👆 Replace with your actual video file path -->
+  Your browser does not support the video tag.
+</video>
+<header>
+ <button class="back-btn" onclick="window.location.href='dashboard.html'">
+  <i class="fa-solid fa-arrow-left-long"></i>
+</button>
+</header>
+
+<main>
+  <!-- Wardrobe -->
+  <section id="wardrobe">
+    <h2>Wardrobe</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/Wardrobe .jpg"><div class="info"><h3>Modern Wardrobe</h3><p>Get dope wardrobe now!</p><button onclick="openModal('Modern Wardrobe','Image/Wardrobe .jpg','Elegant modern wardrobe perfect for minimal spaces.')">View Details</button></div></div>
+      <div class="item"><img src="Image/Wardrobe 1 .jpg"><div class="info"><h3>Luxury Wardrobe</h3><p>Get dope wardrobe now!</p><button onclick="openModal('Luxury Wardrobe','Image/Wardrobe 1 .jpg','Luxury finish wardrobe with soft-close drawers.')">View Details</button></div></div>
+      <div class="item"><img src="Image/Wardrobe 3.jpg"><div class="info"><h3>Sliding Wardrobe</h3><p>Get dope wardrobe now!</p><button onclick="openModal('Sliding Wardrobe','Image/Wardrobe 3.jpg','Smooth sliding doors with full-length mirror.')">View Details</button></div></div>
+    </div>
+  </section>
+
+  <!-- Curtains -->
+  <section id="curtains">
+    <h2>Curtains</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/curtains 3.jpg"><div class="info"><h3>Silk Curtain</h3><p>Get nice curtains now!</p><button onclick="openModal('Silk Curtain','Image/curtains 3.jpg','Soft silk fabric for luxury interiors.')">View Details</button></div></div>
+      <div class="item"><img src="Image/curtain 1.jpg"><div class="info"><h3>Velvet Curtain</h3><p>Get nice curtains now!</p><button onclick="openModal('Velvet Curtain','Image/curtain 1.jpg','Thick velvet curtain ideal for blocking light.')">View Details</button></div></div>
+      <div class="item"><img src="Image/curtains.jpg"><div class="info"><h3>Pattern Curtain</h3><p>Get nice curtains now!</p><button onclick="openModal('Pattern Curtain','Image/curtains.jpg','Modern patterns for stylish living rooms.')">View Details</button></div></div>
+    </div>
+  </section>
+
+  <!-- Cotton Stick -->
+  <section id="cotton">
+    <h2>Cotton Stick</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/cotton 2.jpg"><div class="info"><h3>Soft Cotton Stick</h3><p>Get attractive cottons now!</p><button onclick="openModal('Soft Cotton Stick','Image/cotton 2.jpg','Delicate cotton stick for decorative corners.')">View Details</button></div></div>
+      <div class="item"><img src="Image/cotton 1.jpg"><div class="info"><h3>Decorative Stick</h3><p>Get attractive cottons now!</p><button onclick="openModal('Decorative Stick','Image/cotton 1.jpg','Enhance your decor with natural cotton design.')">View Details</button></div></div>
+      <div class="item"><img src="Image/cotton 3.jpg"><div class="info"><h3>Floral Cotton Stick</h3><p>Get attractive cottons now!</p><button onclick="openModal('Floral Cotton Stick','Image/cotton 3.jpg','Add a floral touch to your home interiors.')">View Details</button></div></div>
+    </div>
+  </section>
+
+  <!-- Wall Panels -->
+  <section id="walls">
+    <h2>Wall Panels</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/wall panel 2.jpg"><div class="info"><h3>3D Wall Panel</h3><p>Get strong wall panel designs now!</p><button onclick="openModal('3D Wall Panel','Image/wall panel 2.jpg','Premium 3D wall panels for modern homes.')">View Details</button></div></div>
+      <div class="item"><img src="Image/wall p.jpg"><div class="info"><h3>Wooden Wall</h3><p>Get strong wall panel designs now!</p><button onclick="openModal('Wooden Wall','Image/wall p.jpg','Rustic wooden wall design with matte finish.')">View Details</button></div></div>
+      <div class="item"><img src="Image/wall panel 3.jpg"><div class="info"><h3>Marble Finish</h3><p>Get strong wall panel designs now!</p><button onclick="openModal('Marble Finish','Image/wall panel 3.jpg','Luxurious marble finish wall panel style.')">View Details</button></div></div>
+    </div>
+  </section>
+
+  <!-- Interior Designs -->
+  <section id="interior">
+    <h2>Kitchen Interior</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/inter.jpg"><div class="info"><h3>Kitchen Room Design</h3><p>Design nice kitchen today!</p><button onclick="openModal('Kitchen Room Design','Image/inter.jpg','Contemporary kitchen room interior concept.')">View Details</button></div></div>
+      <div class="item"><img src="Image/interior 3.jpg"><div class="info"><h3>Side Kitchen Design</h3><p>Design nice kitchen today!</p><button onclick="openModal('Side Kitchen Design','Image/interior 3.jpg','Comfortable kitchen interior with warm lighting.')">View Details</button></div></div>
+      <div class="item"><img src="Image/interr.jpg"><div class="info"><h3>Flat Kitchen Design</h3><p>Design nice kitchen today!</p><button onclick="openModal('Flat Kitchen Design','Image/interr.jpg','Professional kitchen interior setup.')">View Details</button></div></div>
+    </div>
+  </section>
+
+  <!-- Accessories -->
+  <section id="accessories">
+    <h2>Mirror Glass</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/Glass 3.jpg"><div class="info"><h3>Decor Vase</h3><p>Get Latest mirror glass today!</p><button onclick="openModal('Decor Vase','Image/Glass 3.jpg','Elegant vase for mirror glass decoration.')">View Details</button></div></div>
+      <div class="item"><img src="Image/glass 1.jpg"><div class="info"><h3>Wall glass</h3><p>Get Latest mirror glass today!</p><button onclick="openModal('Wall Clock','Image/glass 1.jpg','Modern Mirror glass wall design.')">View Details</button></div></div>
+      <div class="item"><img src="Image/Glass 2.jpg"><div class="info"><h3>Glass Set</h3><p>Get Latest mirror glass today!</p><button onclick="openModal('Lamp Set','Image/Glass 2.jpg','lighting mirror glass for cozy rooms.')">View Details</button></div></div>
+    </div>
+  </section>
+
+
+  <section id="accessories">
+    <h2>Accessories</h2>
+    <div class="grid">
+      <div class="item"><img src="Image/Acc 1.jpg"><div class="info"><h3>Home Accessories</h3><p>Get Sofa accessories today!</p><button onclick="openModal('Home Accessories','Image/Acc 1.jpg','Elegant home accessories decoration.')">View Details</button></div></div>
+      <div class="item"><img src="Image/acc 2.jpg"><div class="info"><h3>Palace Accessories</h3><p>Get Sofa accessories today!</p><button onclick="openModal('Palace Accessories','Image/acc 2.jpg','Modern palace accessories.')">View Details</button></div></div>
+      <div class="item"><img src="Image/Acc.jpg"><div class="info"><h3>Office Accessories</h3><p>Get Sofa accessories today!</p><button onclick="openModal('Office Accessories','Image/Acc.jpg','Modern accessories for cozy offices.')">View Details</button></div></div>
+    </div>
+  </section>
+</main>
+
+<!-- WhatsApp -->
+<div class="whatsapp-btn" onclick="window.open('https://wa.me/2349034214191','_blank')">
+  💬
+</div>
+
+<!-- Modal -->
+<div class="modal" id="productModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal()">×</button>
+    <img id="modalImg" src="">
+    <h3 id="modalTitle"></h3>
+    <p id="modalDesc"></p>
+    <button id="whatsappLink">Message on WhatsApp</button>
+  </div>
+</div>
+
+<script>
+  // Fade in sections on scroll
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible');}
+      else{entry.target.classList.remove('visible');}
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('section').forEach(sec=>observer.observe(sec));
+
+  // Modal logic
+  const modal=document.getElementById('productModal');
+  const mImg=document.getElementById('modalImg');
+  const mTitle=document.getElementById('modalTitle');
+  const mDesc=document.getElementById('modalDesc');
+  const mLink=document.getElementById('whatsappLink');
+  
+  function openModal(title,img,desc){
+    mImg.src=img;
+    mTitle.textContent=title;
+    mDesc.textContent=desc;
+    mLink.onclick=function(){
+      window.open(`https://wa.me/2349034214191?text=Hello! I'm interested in ${title}.`,`_blank`);
+    }
+    modal.classList.add('show');
+  }
+  function closeModal(){modal.classList.remove('show');}
+  modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+  
+    window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const fade = 1 - scrollY / 800;
+    document.getElementById('bgVideo').style.opacity = Math.max(fade, 0.5);
+  });
+</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Surprise Furniture & Exterior Decor — Redefine your space</title>
+<meta name="description" content="Surprise Furniture — handcrafted furniture and interior decor. Modern design, timeless quality." />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* -------------------------
+     Variables & Base
+  --------------------------*/
+  :root{
+    --bg-dark: #070707;
+    --panel-dark: #0f0f10;
+    --gold: #f1c40f;
+    --muted: #bfbfbf;
+    --glass: rgba(255,255,255,0.04);
+    --maxwidth: 1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg-dark);color:#fff;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  /* -------------------------
+     Intro / Glitch
+  --------------------------*/
+  .glitch-intro{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9999;
+    animation:introHide 3s ease forwards;
+  }
+  .glitch-text{
+    text-align:center;font-family:'Playfair Display',serif;font-weight:600;color:var(--gold);
+    font-size:clamp(20px,5.5vw,44px);letter-spacing:1px;
+    position:relative; padding:12px 22px;
+    text-shadow:0 8px 40px rgba(0,0,0,0.6);
+    animation:glitch 1s linear infinite;
+  }
+  @keyframes glitch{
+    0%{transform:translateX(0)}
+    20%{transform:translateX(-2px)}
+    40%{transform:translateX(2px)}
+    60%{transform:translateX(-1px)}
+    80%{transform:translateX(1px)}
+    100%{transform:translateX(0)}
+  }
+  @keyframes introHide{
+    0%,75%{opacity:1}
+    100%{opacity:0;visibility:hidden}
+  }
+
+  /* -------------------------
+     Header
+  --------------------------*/
+  header{
+    position:fixed;left:0;right:0;top:0;height:64px;display:flex;align-items:center;justify-content:space-between;
+    padding:8px 20px;z-index:120;backdrop-filter:blur(6px);
+    background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.25));
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo-slot{width:46px;height:46px;border-radius:8px;background:transparent;border:2px dashed rgba(255,255,255,0.06)}
+  .brand h1{font-size:15px;margin:0;font-weight:700;opacity:0.98}
+  .brand p{font-size:11px;margin:0;color:var(--muted)}
+  nav{display:flex;align-items:center;gap:18px}
+  .nav-links{display:flex;gap:16px;align-items:center}
+  .nav-links a{color:#fff;font-weight:600;font-size:14px;opacity:0.95;padding:6px 8px;border-radius:8px;transition:all .18s}
+  .nav-links a:hover{background:rgba(255,255,255,0.04);color:var(--gold);transform:translateY(-2px)}
+  .enter-btn{background:var(--gold);color:#000;padding:8px 14px;border-radius:999px;font-weight:700;border:none;cursor:pointer;box-shadow:0 10px 30px rgba(241,196,15,0.08)}
+
+  /* Mobile menu */
+  .menu-toggle{display:none;font-size:22px;background:transparent;border:none;color:#fff;cursor:pointer;padding:8px;border-radius:8px}
+
+  /* -------------------------
+     Section background layers
+     (fixed container for backgrounds)
+  --------------------------*/
+  .bg-container{
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  }
+  .bg-layer{
+    position:absolute;inset:0;background-size:cover;background-position:center center;opacity:0;transform:scale(1.03);transition:opacity .9s ease,transform .9s ease,filter .9s ease;
+    will-change:opacity,transform,filter;
+  }
+  .bg-layer.active{opacity:1;transform:scale(1);filter:brightness(.9)}
+  /* overlay animated layer (glow / 3D element) */
+  .bg-overlay{
+    position:absolute;inset:0;background-repeat:no-repeat;background-position:center center;opacity:0;transform:translateY(0) scale(1);transition:opacity .8s ease, transform 1.2s cubic-bezier(.2,.9,.3,1);
+    pointer-events:none;mix-blend-mode:screen;
+  }
+  .bg-overlay.active{opacity:1;transform:translateY(0) scale(1.02)}
+  .bg-overlay.float{animation:floatSlow 8s ease-in-out infinite alternate}
+  @keyframes floatSlow{from{transform:translateY(-8px) } to{transform:translateY(8px)}}
+
+  /* -------------------------
+     Page content wrapper
+  --------------------------*/
+  main{position:relative;z-index:6}
+  .section{min-height:70vh;padding:calc(10vh + 60px) 18px 8vh;display:flex;align-items:center;justify-content:center}
+  .wrap{max-width:var(--maxwidth);width:100%;margin:0 auto;color:#fff}
+
+  /* -------------------------
+     HERO
+  --------------------------*/
+  .hero{display:flex;align-items:center;justify-content:center;text-align:center}
+  .kicker{display:inline-block;background:rgba(0,0,0,0.25);padding:6px 12px;border-radius:999px;color:var(--gold);font-weight:700;margin-bottom:16px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,56px);margin:0;line-height:1.02}
+  .hero h2 span{color:var(--gold)}
+  .hero p{color:rgba(255,255,255,0.92);max-width:840px;margin:16px auto 0;font-size:1.05rem;line-height:1.6}
+  .hero-actions{margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+  /* -------------------------
+     ABOUT
+  --------------------------*/
+  .about-grid{display:grid;grid-template-columns:1fr 420px;gap:26px;align-items:center}
+  .about-card{background:rgba(255,255,255,0.96);color:#111;padding:22px;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.06)}
+  .about-card h3{margin-top:0;color:var(--bg-dark)}
+  .object-slot{display:flex;align-items:center;justify-content:center;min-height:280px}
+  .object-slot img{width:420px;max-width:100%;transform:translateY(-40px) scale(.98);opacity:0;transition:all .9s cubic-bezier(.2,.9,.3,1)}
+  .object-slot img.show{transform:translateY(0) scale(1);opacity:1;filter:drop-shadow(0 24px 60px rgba(0,0,0,0.5))}
+
+  /* -------------------------
+     SERVICES
+  --------------------------*/
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+  .service{background:linear-gradient(180deg,#0f0f10,rgba(255,255,255,0.02));padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .28s}
+  .service:hover{transform:translateY(-8px)}
+  .service h4{margin:0 0 8px;color:var(--gold)}
+  .service p{margin:0;color:rgba(255,255,255,0.88);font-size:14px;line-height:1.5}
+
+  /* -------------------------
+     GALLERY
+  --------------------------*/
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .card{position:relative;border-radius:10px;overflow:hidden;background:#111}
+  .card img{width:100%;height:160px;object-fit:cover;transition:transform .45s}
+  .card:hover img{transform:scale(1.06)}
+  .card .label{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,0.5);padding:6px 8px;border-radius:8px;color:#fff;font-weight:600}
+
+  /* -------------------------
+     CONTACT / FOOTER
+  --------------------------*/
+  .contact-grid{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .contact-box{background:linear-gradient(180deg, rgba(241,196,15,0.07), rgba(241,196,15,0.02));padding:12px 16px;border-radius:10px}
+  footer{padding:18px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
+
+  /* -------------------------
+     Reveal helper & responsive
+  --------------------------*/
+  .reveal{opacity:0;transform:translateY(14px);transition:all .7s cubic-bezier(.2,.9,.3,1)}
+  .reveal.show{opacity:1;transform:none}
+  @media(max-width:980px){
+    .about-grid{grid-template-columns:1fr;gap:14px}
+    .object-slot img{width:320px}
+  }
+  @media(max-width:600px){
+    header{height:56px;padding:8px 12px}
+    .nav-links{display:none;position:absolute;right:12px;top:56px;background:#050505;padding:12px;border-radius:10px;flex-direction:column;gap:8px}
+    .menu-toggle{display:block}
+    .hero h2{font-size:20px}
+    .hero p{font-size:13px;max-width:95%}
+    .about-card{padding:14px}
+    .object-slot{min-height:180px}
+    .object-slot img{width:260px}
+    .service h4{font-size:14px}
+    .card img{height:120px}
+    section{padding:60px 12px}
+  }
+
+  /* very tight tiny screens */
+  @media(max-width:360px){
+    .hero h2{font-size:20px}
+    .hero p{font-size:18px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Background container: contains multiple background layers and overlays -->
+  <div class="bg-container" aria-hidden="true">
+    <!-- Home -->
+    <div class="bg-layer" id="bg-home" style="background-image:url('Image/Mad\ 1.jpg')"></div>
+    <div class="bg-overlay" id="ov-home" style="background-image:url('images/ov-home.png')"></div>
+
+    <!-- About -->
+    <div class="bg-layer" id="bg-about" style="background-image:url('Image/our\ service.jpg')"></div>
+    <div class="bg-overlay" id="ov-about" style="background-image:url('images/ov-about.png')"></div>
+
+    <!-- Services -->
+    <div class="bg-layer" id="bg-services" style="background-image:url('Image/bg-home.jpg')"></div>
+    <div class="bg-overlay" id="ov-services" style="background-image:url('images/ov-services.png')"></div> 
+
+    <!-- Gallery -->
+    <div class="bg-layer" id="bg-gallery" style="background-image:url('Image/bg-home\ 2.jpg')"></div>
+    <div class="bg-overlay" id="ov-gallery" style="background-image:url('images/ov-gallery.png')"></div>
+
+    <!-- Contact -->
+    <div class="bg-layer" id="bg-contact" style="background-image:url('Image/download\ \(1\).jpg')"></div>
+    <<div class="bg-overlay" id="ov-contact" style="background-image:url('images/ov-contact.png')"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-slot" aria-hidden="true"></div>
+      <div>
+        <h1>Surprise Furniture</h1>
+        <p style="margin-top:4px">Redefine your space</p>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-target="home">Home</a></li>
+        <li><a href="#about" data-target="about">About</a></li>
+        <li><a href="#services" data-target="services">Services</a></li>
+        <li><a href="#gallery" data-target="gallery">Gallery</a></li>
+        <li><a href="#contact" data-target="contact">Contact</a></li>
+      </ul>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">&#9776;</button>
+     <a href="dashboard.html"><button class="enter-btn" id="enterBtn"> Enter Websit</button></a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="section hero" aria-label="Home">
+      <div class="wrap">
+        <div class="kicker reveal">Redefine your space</div>
+        <h2 class="reveal">Crafted Comfort — <span>Built for Every Home</span></h2>
+        <p class="reveal">We create furniture that blends story and strength — handcrafted pieces that honor tradition while embracing modern living. Each design is made with care, material integrity, and a deep respect for your home.</p>
+        <div class="hero-actions reveal" style="margin-top:20px">
+          <button class="enter-btn" onclick="enterWebsite()">Enter Website</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about" aria-label="About">
+      <div class="wrap about-grid">
+        <div class="about-card reveal">
+          <h3>About Surprise Furniture</h3>
+          <p>Born from a love of wood and form, Surprise Furniture started as a small local workshop with a bold idea — transform spaces with thoughtful pieces. Today, we marry Arabic-inspired detail with modern function, delivering bed frames, cabinets, and bespoke wall installations that last generations.</p>
+          <p style="margin-top:12px;color:var(--muted)">Address: Behind Abuja Poly Area, Offa, Kwara State</p>
+        </div>
+
+        <!-- <div class="object-slot">
+          set image (table.png) into images/ folder before using -->
+          <!-- <img id="objImage" src="images/table.png" alt="Featured piece" />
+        </div> -->
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section services" aria-label="Services">
+      <div class="wrap">
+        <h2 class="reveal">Our Services</h2>
+        <p class="reveal">From custom woodwork to full interior styling — we support the full journey: design, build, finish and deliver.</p>
+
+        <div class="services-grid" style="margin-top:22px">
+          <div class="service reveal">
+            <h4>Custom Wood Furniture</h4>
+            <p>Handcrafted pieces tailored to size and finish — chairs, beds, wardrobes and more.</p>
+          </div>
+
+          <div class="service reveal">
+            <h4>Interior Design & Fit-out</h4>
+            <p>End-to-end design that ensures your furniture and space tell a unified story.</p>
+          </div>
+
+          <div class="service reveal">
+            <h4>3D Visualization</h4>
+            <p>See your future room in 3D before we build — get a perfect preview and make confident choices.</p>
+          </div>
+
+          <div class="service reveal">
+            <h4>Delivery & Professional Setup</h4>
+            <p>Careful packing, safe shipping, and expert installation for every order.</p>
+          </div>
+
+          <div class="service reveal">
+            <h4>Repair & Restoration</h4>
+            <p>Restore cherished pieces to their original strength, finish and shine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="section gallery" aria-label="Gallery">
+      <div class="wrap">
+        <h2 class="reveal">Our Collection</h2>
+        <p class="reveal">A selection of recent works — each piece tells a story of craft and care.</p>
+
+        <div class="gallery-grid" style="margin-top:18px">
+          <div class="card reveal"><img src="Image/Bed Frame .jpg" alt="Premium Sofa"><div class="label">Premium Sofa</div></div>
+          <div class="card reveal"><img src="Image/Table 1.jpg" alt="Dining Table"><div class="label">Dining Table</div></div>
+          <div class="card reveal"><img src="Image/All in One .jpg" alt="Custom Shelf"><div class="label">Custom Shelf</div></div>
+          <div class="card reveal"><img src="Image/Flow wall.jpg" alt="3D Wall"><div class="label">3D Wall</div></div>
+          <div class="card reveal"><img src="Image/Tv guide.jpg" alt="TV Stand"><div class="label">TV Stand</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact" aria-label="Contact">
+      <div class="wrap">
+        <h2 class="reveal">Contact & Enquiries</h2>
+        <p class="reveal">Ready to redefine your space? Contact us for consultations, quotes, or custom orders. We respond quickly and treat every project with confidentiality and care.</p>
+
+        <div class="contact-grid" style="margin-top:18px">
+          <div class="contact-box reveal">
+            <strong>Phone</strong><br>
+            <a href="tel:+2349034214191" style="color:#fff">09034214191</a>
+          </div>
+
+          <div class="contact-box reveal">
+            <strong>Email</strong><br>
+            <a href="mailto:info@surprisefurn.ng" style="color:#fff">info@surprisefurn.ng</a>
+          </div>
+
+          <div class="contact-box reveal">
+            <strong>WhatsApp</strong><br>
+            <a href="https://wa.me/9034214191" target="_blank" style="color:#fff">Chat on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; <span id="yr"></span> Surprise Furniture & Exterior Decor — Designed with care by QYRO Digital.
+  </footer>
+
+<script>
+  // small helpers
+  const id = (s)=>document.getElementById(s);
+  // set copyright year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Mobile nav toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  if(menuToggle){
+    menuToggle.addEventListener('click', ()=>{
+      navLinks.classList.toggle('show');
+    });
+  }
+
+  // Enter Website: change to open another page (same tab)
+  function enterWebsite(){
+    // replace 'main.html' with your real website link if needed
+    window.location.href = 'dashboard.html';
+  }
+
+  // Smooth reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('show');
+    });
+  }, {threshold:0.18});
+  reveals.forEach(r=>revealObs.observe(r));
+
+  // Background control: toggle which bg-layer/bg-overlay is active
+  const sections = ['home','about','services','gallery','contact'];
+  const bgLayers = sections.map(s=>({layer:id('bg-'+s), overlay:id('ov-'+s), section:id(s)}));
+
+  // initial activation: show first
+  function activateBG(name){
+    bgLayers.forEach(b=>{
+      if(!b.layer || !b.overlay) return;
+      if(b.section && b.section.id === name){
+        b.layer.classList.add('active');
+        b.overlay.classList.add('active');
+      } else {
+        b.layer.classList.remove('active');
+        b.overlay.classList.remove('active');
+      }
+    });
+  }
+  // observe sections to activate backgrounds when in view
+  const bgObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(ent=>{
+      if(ent.isIntersecting){
+        activateBG(ent.target.id);
+      }
+    });
+  }, {threshold:0.45});
+  sections.forEach(s=>{
+    const sec = document.getElementById(s);
+    if(sec) bgObserver.observe(sec);
+  });
+  // activate initial
+  activateBG('home');
+
+  // object image appear on About (no falling)
+  const objImg = id('objImage');
+  const aboutSect = id('about');
+  if(objImg && aboutSect){
+    const imgObs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) objImg.classList.add('show');
+        else objImg.classList.remove('show');
+      });
+    }, {threshold:0.28});
+    imgObs.observe(aboutSect);
+  }
+
+  // mobile performance: disable overlays on small screens
+  function adjustForMobile(){
+    if(window.innerWidth < 520){
+      document.querySelectorAll('.bg-overlay').forEach(el=>el.classList.remove('active'));
+      document.querySelectorAll('.bg-overlay').forEach(el=>el.style.display='none');
+    } else {
+      document.querySelectorAll('.bg-overlay').forEach(el=>el.style.display='block');
+    }
+  }
+  adjustForMobile();
+  window.addEventListener('resize', adjustForMobile);
+
+  // nav link smooth scroll + bg activation on click
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const idTarget = a.getAttribute('href').replace('#','');
+      const sec = document.getElementById(idTarget);
+      if(sec){
+        sec.scrollIntoView({behavior:'smooth',block:'start'});
+        // if mobile, hide menu
+        if(window.innerWidth < 900) navLinks.classList.remove('show');
+      }
+    });
+  });
+
+  // safety: if images not present, keep site functional (no console errors)
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // ensure bg-layers exist
+    document.querySelectorAll('.bg-layer').forEach((b)=>{ if(!b.style.backgroundImage) b.style.backgroundColor='rgba(0,0,0,0.4)'; });
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Surprise Furniture — Crafted Comfort</title>
+<meta name="description" content="Surprise Furniture — modern luxury furniture. Order directly, include your budget — owner and user both get notified." />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  /* === Theme variables === */
+  :root{
+    --bg:#070707;
+    --card:#0e0e0e;
+    --muted:#bdbdbd;
+    --accent-green:#16a34a;
+    --accent-gold:#d4af37;
+    --glass: rgba(255,255,255,0.03);
+    --max-width:1200px;
+    --section-fade-duration: 900ms;
+  }
+
+  /* === Reset/base === */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:'Poppins',sans-serif;-webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%;}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--max-width);margin:0 auto;padding:16px}
+  button{font-family:inherit}
+
+  /* === Header === */
+  header{position:sticky;top:0;z-index:200;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.06));backdrop-filter:blur(6px);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo-blank{width:44px;height:44px;border-radius:8px;border:2px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;color:var(--accent-gold);font-weight:800}
+  .brand h1{font-size:16px;margin:0}
+  nav{display:flex;gap:12px;align-items:center}
+  nav a{font-weight:600;font-size:13px;color:rgba(255,255,255,0.95);text-decoration:none;padding:8px;border-radius:8px}
+  nav a:hover{background:rgba(255,255,255,0.02)}
+  .cta{background:linear-gradient(180deg,var(--accent-green), #0e8a3f);color:#000;padding:8px 14px;border-radius:999px;border:none;cursor:pointer;font-weight:700;box-shadow:0 10px 30px rgba(16,185,129,0.08);transition:transform .18s}
+  .cta:hover{transform:translateY(-6px)}
+
+  /* mobile nav */
+  .menu-toggle{display:none;background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer}
+  .mobile-nav{display:none;position:fixed;right:12px;top:64px;background:#0b0b0b;border-radius:8px;padding:10px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+  .mobile-nav a{display:block;padding:8px 10px;color:#fff}
+
+  /* === Section backgrounds + fade behaviour === */
+  section {
+    position:relative;
+    padding:48px 0;
+    min-height: 60vh;
+    display:block;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* container for content */
+  .section-inner{position:relative;z-index:3;max-width:calc(var(--max-width) - 32px);margin:0 auto;padding:0 12px}
+
+  /* each section's background is in ::before so we can fade it independently */
+  section::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(.42) contrast(1.02);
+    transition: opacity var(--section-fade-duration) ease, transform var(--section-fade-duration) ease;
+    opacity: 0;
+    transform: scale(1.02);
+  }
+
+  /* use CSS variable --bg for the image url on each section */
+  section[data-bg]::before { background-image: var(--bg); }
+
+  /* visible class is toggled by JS observer */
+  section.visible::before { opacity: 1; transform: scale(1); }
+
+  /* dark overlay layer to keep text readable */
+  section::after{
+    content: "";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.28));
+    pointer-events:none;
+    opacity:1;
+  }
+
+  /* keep the actual content above overlays */
+  .section-inner { position: relative; z-index: 4; }
+
+  /* Section headings & text */
+  h2.section-title{font-size:18px;color:var(--accent-gold);margin:0 0 8px}
+  p.lead{color:var(--muted);line-height:1.6;margin:0 0 12px;font-size:15px}
+
+  /* === Hero === */
+  .hero{min-height:64vh;display:grid;place-items:center;text-align:center;padding-top:36px}
+  .kicker{display:inline-block;background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;color:var(--accent-green);font-weight:700;margin-bottom:12px;font-size:13px}
+  .hero-title{font-size:clamp(20px,6vw,48px);margin:6px 0 12px;font-weight:700}
+  .hero-sub{max-width:760px;margin:0 auto;color:rgba(255,255,255,0.9);font-size:15px}
+  .hero-ctas{display:flex;gap:10px;justify-content:center;margin-top:18px}
+
+  /* === About / Services === */
+  .about-grid{display:grid;grid-template-columns:1fr 420px;gap:18px;align-items:center}
+  .about-card{background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;backdrop-filter: blur(2px);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+  .about-card h3{margin:0 0 8px;font-size:18px}
+  .about-card p{color:var(--muted);font-size:14px}
+
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:12px}
+  .service{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;text-align:center;transition:transform .2s}
+  .service:hover{transform:translateY(-8px)}
+  .service h4{color:var(--accent-green);margin:8px 0;font-size:15px}
+  .service p{color:var(--muted);font-size:13px}
+
+  /* === Products gallery, categories === */
+  .category{margin-top:22px}
+  .category h3{margin:0 0 10px;color:var(--accent-gold);font-size:16px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .product{position:relative;border-radius:10px;overflow:hidden;background:#0b0b0b}
+  .product img{width:100%;height:210px;object-fit:cover;transition:transform .45s}
+  .product:hover img{transform:scale(1.06)}
+  .prod-label{position:absolute;left:10px;bottom:10px;background:linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2));padding:8px 10px;border-radius:8px;font-weight:700;z-index:5}
+  .prod-actions{position:absolute;right:10px;bottom:10px;display:flex;gap:8px;z-index:5}
+  .order-btn{background:var(--accent-green);color:#000;border:none;padding:8px 10px;border-radius:8px;font-weight:700;cursor:pointer;transition:transform .18s}
+  .order-btn:hover{transform:translateY(-6px)}
+
+  /* === Contact/ Footer === */
+  .contact-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .small-muted{color:var(--muted);font-size:13px}
+
+  /* === Modal (order) === */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:600;visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
+  .modal.show{visibility:visible;opacity:1}
+  .modal-card{width:min(760px,calc(100% - 28px));background:#0b0b0b;padding:16px;border-radius:12px;box-shadow:0 30px 70px rgba(0,0,0,0.7)}
+  .modal h3{margin:0 0 8px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  label.small{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+  input[type="text"], input[type="email"], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+  textarea{min-height:96px;resize:vertical}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+  .btn-cancel{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:9px 12px;border-radius:8px;color:#fff;cursor:pointer}
+  .btn-send{background:var(--accent-green);color:#000;padding:9px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+
+  /* form style for embedded order card (kept white-ish like your image) */
+  .order-form-card {
+    /* background: greenyellow; */
+    color: #09dc57;
+    backdrop-filter: var(--glass);
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgb(26, 25, 27);
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .order-form-card input, .order-form-card textarea, .order-form-card select {
+    width:100%; margin-top:12px; padding:10px; border-radius:8px; border:1px solid #1760f4; font-size:15px;
+  }
+  .order-form-card button { width:100%; margin-top:12px; padding:12px; border-radius:8px; border:none; background:var(--accent-green); color:#131413; font-weight:700; cursor:pointer; }
+
+  /* Loading screen */
+  .loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .18s, visibility .18s;
+  }
+  .loading-screen.show { visibility: visible; opacity: 1; }
+
+  .progress-bar { width: 80%; max-width:420px; height: 12px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin-top:12px; }
+  .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #4CAF50, #81C784); transition: width .25s linear; }
+
+  .success-box {
+    margin-top: 16px; text-align:center; display:none;
+  }
+  .success-box.show { display:block; }
+
+  /* Toast / Notification box for user after successful send */
+  .toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10010;
+    background: linear-gradient(180deg,#041c09, #08310c);
+    border-left: 6px solid var(--accent-green);
+    color: #e9ffe9;
+    padding: 16px 18px;
+    border-radius: 10px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.6);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform .4s cubic-bezier(.2,.9,.3,1), opacity .4s;
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .toast h4 { margin:0 0 6px; font-size:16px; color:#fff; }
+  .toast p { margin:0; font-size:14px; color: #dfffdc; line-height:1.4; }
+
+  /* === Responsive tight rules === */
+  @media (max-width:980px){
+    .about-grid{grid-template-columns:1fr;gap:12px}
+    .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:520px){
+    .wrap{padding:12px}
+    header{padding:8px 12px}
+    nav{display:none}
+    .menu-toggle{display:block}
+    .mobile-nav{display:block}
+    .hero-title{font-size:18px}
+    .hero-sub{font-size:13px}
+    .product img{height:160px}
+    .modal-card{width:calc(100% - 16px);padding:12px}
+    .form-grid{grid-template-columns:1fr}
+    .service h4{font-size:13px}
+    .service p{font-size:12px}
+    .prod-label{font-size:12px;padding:6px}
+    .order-btn{padding:6px 8px;font-size:12px}
+    .toast { right: 12px; left: 12px; bottom: 12px; max-width: calc(100% - 48px); }
+  }
+  @media (max-width:360px){
+    .hero-title{font-size:16px}
+    .hero-sub{font-size:11px}
+  }
+
+  /* minor helpers */
+  .muted{color:var(--muted);font-size:13px}
+
+  .footer-links a:hover {
+  color: #00bcd4;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 1rem;
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  color: #f9f9f9;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: #00bcd4;
+  color: #fff;
+  transform: translateY(-4px);
+}
+.see-more-btn {
+  display: inline-block;
+  margin: 30px auto 0;
+  background: linear-gradient(135deg, #05cf2a, #006eff);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: floatBtn 2s ease-in-out infinite;
+}
+
+.see-more-btn:hover {
+  background: linear-gradient(135deg, #ff5f00, #ff8c00);
+  transform: scale(1.08);
+  box-shadow: 0 6px 15px rgba(255,95,0,0.4);
+}
+
+@keyframes floatBtn {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+/* Make See More button smaller on mobile */
+@media (max-width: 600px) {
+  .see-more-btn{
+    font-size: 14px;      /* smaller text */
+    padding: 6px 12px;    /* reduce padding */
+    border-radius: 5px;   /* keep rounded corners */
+    height: 30px;
+    margin-top: 120px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- HEADER / NAV -->
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo-blank" aria-hidden>SF</div>
+        <div>
+          <h1>Surprise</h1>
+          <div class="muted" style="font-size:12px">Modern • Luxury • Damn Good</div>
+        </div>
+      </div>
+
+      <nav id="mainNav">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#gallery">Products</a>
+        <a href="#contact">Contact</a>
+        <button class="cta" onclick="scrollToId('gallery')">Order Now</button>
+      </nav>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">&#9776;</button>
+      <div class="mobile-nav" id="mobileNav" style="display:none">
+        <a href="#home" onclick="closeMobile()">Home</a>
+        <a href="#about" onclick="closeMobile()">About</a>
+        <a href="#services" onclick="closeMobile()">Services</a>
+        <a href="#gallery" onclick="closeMobile()">Products</a>
+        <a href="#contact" onclick="closeMobile()">Contact</a>
+      </div>
+    </header>
+  </div>
+
+  <!-- HERO (section with its own background) -->
+  <section id="home" class="section hero" data-bg style="--bg: url('Image/mode.jpg')">
+    <div class="section-inner">
+      <div style="text-align:center;max-width:920px;margin:0 auto">
+        <div class="kicker">Quality • Fast • Reliable</div>
+        <div class="hero-title">Crafted Comfort — <span style="color:var(--accent-green)">Built for Every Home</span></div>
+        <p class="hero-sub">Surprise blends local craft and modern design. Browse our categories and place an order — include your budget and we’ll contact you fast.</p>
+
+        <div class="hero-ctas">
+          <button class="cta" onclick="scrollToId('gallery')">Browse Products</button>
+          <button class="cta" onclick="scrollToId('contact')">Contact Owner</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section" data-bg style="--bg: white">
+    <div class="section-inner about-grid">
+      <div class="about-card">
+        <h3>About Surprise Furniture</h3>
+        <p>At Surprise SWF Furniture, elegance meets craftsmanship. Each creation — from bespoke wardrobes and exquisite curtains to refined wall panels and interior pieces — is designed to elevate your living experience.
+
+We blend timeless design with modern sophistication, ensuring every detail reflects luxury, comfort, and artistry. With us, your space becomes more than just a home — it becomes a masterpiece.</p>
+        <p class="muted" style="margin-top:8px">Local: Offa, Kwara State • Fast local delivery • Trusted craftsmanship</p>
+      </div>
+
+      <!-- <div style="display:flex;align-items:center;justify-content:center">
+        !-- image intentionally kept (product showcase) but not floating -->
+        <!-- <img src="Image/about-product.jpg" alt="About product" style="width:100%;max-width:420px;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,0.6)">
+      </div> --> 
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section" data-bg style="--bg: url('Image/whity.jpg')">
+    <div class="section-inner">
+      <h2 class="section-title">Services</h2>
+      <p class="lead">From bespoke furniture to full interior accents — we measure, design, craft and install. Each project includes a consultation and on-site measurement.</p>
+
+      <div class="services-grid">
+        <div class="service card"><h4>Custom Furniture</h4><p>Made-to-measure beds, cabinets, and living sets.</p></div>
+        <div class="service card"><h4>Interior Design</h4><p>3D wall features, cabinetry, and full interior accents.</p></div>
+        <div class="service card"><h4>Exterior & Outdoor</h4><p>Durable fixtures suited to local conditions.</p></div>
+        <div class="service card"><h4>Delivery & Setup</h4><p>Professional transport and careful installation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY / PRODUCTS -->
+  <section id="gallery" class="section" data-bg style="--bg: url('Image/gallery-bg.jpg')">
+    <div class="section-inner">
+      <h2 class="section-title">Latest Products</h2>
+      <p class="lead">Choose a category. Click <strong>Order</strong> on any product — include your budget and we’ll reply quickly.</p>
+
+      <!-- Chairs -->
+      <div class="category">
+        <h3>Chairs</h3>
+        <div class="gallery-grid">
+          <div class="product" data-title="Premium Armchair" data-img="Image/ai chair.jpg">
+            <img src="Image/ai chair.jpg" alt="Premium Armchair">
+            <div class="prod-label">Premium Armchair</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Dining Chair Set" data-img="Image/set 2.jpg">
+            <img src="Image/set 2.jpg" alt="Dining Chair Set">
+            <div class="prod-label">Dining Chair Set</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Accent Chair" data-img="Image/accent 2.jpg">
+            <img src="Image/accent 2.jpg" alt="Accent Chair">
+            <div class="prod-label">Accent Chair</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tables -->
+      <div class="category">
+        <h3>Tables</h3>
+        <div class="gallery-grid">
+          <div class="product" data-title="Dining Table (6-seater)" data-img="Image/Dining Design.jpg">
+            <img src="Image/Dining Design.jpg" alt="Dining Table">
+            <div class="prod-label">Dining Table (6-seater)</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Coffee Table" data-img="Image/coffee.jpg">
+            <img src="Image/coffee.jpg" alt="Coffee Table">
+            <div class="prod-label">Coffee Table</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Console Table" data-img="Image/console 2.jpg">
+            <img src="Image/console 2.jpg" alt="Console Table">
+            <div class="prod-label">Console Table</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bed Frames -->
+      <div class="category">
+        <h3>Bed Frames</h3>
+        <div class="gallery-grid">
+          <div class="product" data-title="Solid Wood Bed (King)" data-img="Image/solid 2.jpg">
+            <img src="Image/solid 2.jpg" alt="Solid Wood Bed">
+            <div class="prod-label">Solid Wood Bed</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Platform Bed" data-img="Image/solid wood .jpg">
+            <img src="Image/solid wood .jpg" alt="Platform Bed">
+            <div class="prod-label">Platform Bed</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Storage Bed" data-img="Image/storage 2.jpg">
+            <img src="Image/storage 2.jpg" alt="Storage Bed">
+            <div class="prod-label">Storage Bed</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TV Stands -->
+      <div class="category">
+        <h3>TV Stands & Guides</h3>
+        <div class="gallery-grid">
+          <div class="product" data-title="Minimal TV Stand" data-img="Image/Minimal.jpg">
+            <img src="Image/Minimal.jpg" alt="Minimal TV Stand">
+            <div class="prod-label">Minimal TV Stand</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Media Console" data-img="Image/Tv guide.jpg">
+            <img src="Image/Tv guide.jpg" alt="Media Console">
+            <div class="prod-label">Media Console</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <div class="product" data-title="Corner TV Unit" data-img="Image/conertv.jpg">
+            <img src="Image/conertv.jpg" alt="Corner TV Unit">
+            <div class="prod-label">Corner TV Unit</div>
+            <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
+          </div>
+          <!-- SEE MORE BUTTON -->
+<a href="Interior.html" class="see-more-btn">
+  See More 🔍
+</a>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section" data-bg style="--bg: url('Image/Mad 1.jpg')">
+    <div class="section-inner">
+      <h2 class="section-title">Contact</h2>
+      <div class="contact-card">
+          <div class="contact-info">
+  <p><a href="mailto:sharafadeendamilare@gmail.com"><i class="fas fa-envelope"></i> contact@yourcompany.com</a></p>
+  <p> <a href="tell:+2349034214191"><i class="fas fa-phone"></i> 09034214191</p></a><br></br>
+
+          <h3>Company Name</h3>
+          <p style="font-weight:700">Surprise Furniture & Exterior Decor</p><br></br>
+          <h3>Address </h3>
+          <p>Behind Abuja Poly Area, Offa, Kwara State</p>
+          </div>
+          </div>
+        </div>
+    
+      <!-- <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a> -->
+    </div>
+  </div>
+
+
+      </div>
+    </div>
+  </section>
+<div class="footer-links">
+   <div class="social-icons">
+      <a href="https://facebook.com/surprise.sfw.damilare" target="_blank" class="social-icon" aria-label="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.instagram.com/surprisefuniture?igsh=MXQ4OG56cWkwaGplMg%3D%3D&utm_source=qr" target="_blank" class="social-icon" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+       <a href="https://wa.me/2349034214191" text="text=Hello%20👋%2C%20I%27m%20interested%20in%20your%20furniture%20from%20YourCompanyName%20website%20🪑%20and%20would%20love%20to%20know%20more%20about%20your%20products.""  target="_blank" class="social-icon" aria-label="Twitter">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+    </div>
+
+  <!-- FOOTER -->
+  <footer style="padding:18px">
+    <div class="wrap"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+      <div class="small-muted">© Surprise — Designed by QYRO Digital</div>
+      <div class="small-muted">Fast • Reliable • Local</div>
+    </div></div>
+  </footer>
+
+  <!-- ORDER MODAL (unchanged structure, kept form fields as requested) -->
+  <div id="orderModal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+      <h3 id="orderTitle">Order</h3>
+
+      <!-- The white card style form that matches the look you requested -->
+      <div class="order-form-card">
+        <form id="orderForm">
+          <div class="form-grid">
+            <div>
+              <label class="small" for="o_name">Full name *</label>
+              <input id="o_name" name="user_name" type="text" placeholder="Your full name" required>
+            </div>
+            <div>
+              <label class="small" for="o_phone">Phone *</label>
+              <input id="o_phone" name="user_phone" type="text" placeholder="+234..." required>
+            </div>
+          </div>
+
+          <div style="margin-top:8px">
+            <label class="small" for="o_email">Email *</label>
+            <input id="o_email" name="user_email" type="email" placeholder="you@example.com" required>
+          </div>
+
+          <div style="margin-top:8px" class="form-grid">
+            <div>
+              <label class="small" for="o_product">Product</label>
+              <input id="o_product" name="product_title" type="text" readonly>
+            </div>
+            <div>
+              <label class="small" for="o_qty">Quantity</label>
+              <select id="o_qty" name="quantity">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:8px">
+            <label class="small" for="o_budget">Your Budget (₦) *</label>
+            <input id="o_budget" name="user_budget" type="text" placeholder="e.g. 50000" required>
+          </div>
+
+          <div style="margin-top:8px">
+            <label class="small" for="o_msg">Message / Details *</label>
+            <textarea id="o_msg" name="message" placeholder="Delivery location, finish, measurements..." required></textarea>
+          </div>
+
+          <input id="o_product_img" name="product_image" type="hidden" value="">
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" onclick="closeOrderModal()">Cancel</button>
+            <button type="submit" class="btn-send">Send Order</button>
+          </div>
+
+          <div id="orderStatus" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
+        </form>
+      </div>
+
+      <!-- Loading Screen inside modal scope (global overlay below) -->
+    </div>
+  </div>
+
+  <!-- GLOBAL Loading screen / progress / success box -->
+  <div class="loading-screen" id="loadingScreen" aria-hidden="true">
+    <div id="loadingText">Sending your order... 0%</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="success-box" id="successBox">
+      <h2>🎉 Order Received!</h2>
+      <p>Thank you for your order. We’ll contact you shortly.</p>
+    </div>
+  </div>
+
+  <!-- TOAST notification for user (the friendly message you wanted) -->
+  <div class="toast" id="orderToast" role="status" aria-live="polite">
+    <h4>Thanks for choosing us!</h4>
+    <p>We received your order — we will get back to you soon. We love you 💚</p>
+  </div>
+
+  <!-- EmailJS + UI script (kept values as you provided) -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+  /* ====== EMAILJS CONFIG (left exactly as you provided) ====== */
+  const EMAILJS_PUBLIC_KEY = 'HiAU4QejjviP3m_J6';    // <- kept as-is
+  const EMAILJS_SERVICE_ID = 'service_2zc0gci';       // <- kept as-is
+  const EMAILJS_TEMPLATE_OWNER = 'template_569bbku'; // <- kept as-is
+  const EMAILJS_TEMPLATE_USER = 'template_dhjmzg8';   // <- kept as-is
+  (function(){ if(window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY); })();
+  /* ========================================================= */
+
+  // mobile menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  if(menuToggle){
+    menuToggle.addEventListener('click', ()=> {
+      mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+  function closeMobile(){ if(mobileNav) mobileNav.style.display = 'none'; }
+
+  // ORDER modal logic (open/close)
+  const orderModal = document.getElementById('orderModal');
+  const orderForm = document.getElementById('orderForm');
+  const orderStatus = document.getElementById('orderStatus');
+
+  function openOrderModal(btn){
+    const product = btn.closest('.product');
+    const title = product?.getAttribute('data-title') || 'Product';
+    const img = product?.getAttribute('data-img') || product?.querySelector('img')?.getAttribute('src') || '';
+    document.getElementById('o_product').value = title;
+    document.getElementById('o_product_img').value = img;
+    document.getElementById('o_qty').value = '1';
+    orderForm.reset();
+    // repopulate product after reset
+    document.getElementById('o_product').value = title;
+    orderStatus.textContent = '';
+    orderModal.classList.add('show'); orderModal.setAttribute('aria-hidden','false');
+    setTimeout(()=> document.getElementById('o_name').focus(), 200);
+  }
+  function closeOrderModal(){ orderModal.classList.remove('show'); orderModal.setAttribute('aria-hidden','true'); }
+  orderModal.addEventListener('click', (e)=> { if(e.target === orderModal) closeOrderModal(); });
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') closeOrderModal(); });
+
+  // Loading UI & Toast helpers
+  const loadingScreen = document.getElementById('loadingScreen');
+  const loadingText = document.getElementById('loadingText');
+  const progressFill = document.getElementById('progressFill');
+  const successBox = document.getElementById('successBox');
+  const toast = document.getElementById('orderToast');
+
+  function showLoading(){
+    progressFill.style.width = '0%';
+    loadingText.textContent = 'Sending your order... 0%';
+    successBox.classList.remove('show');
+    loadingScreen.classList.add('show');
+  }
+  function hideLoading(){
+    loadingScreen.classList.remove('show');
+  }
+  function setProgress(p){
+    progressFill.style.width = p + '%';
+    loadingText.textContent = 'Sending your order... ' + Math.floor(p) + '%';
+  }
+  function showSuccessBox(){
+    successBox.classList.add('show');
+    loadingText.textContent = 'Done';
+  }
+
+  function showToastAndAutoHide(){
+    toast.classList.add('show');
+    // auto hide after 6s
+    setTimeout(()=> toast.classList.remove('show'), 6000);
+  }
+
+  // submit order -> send TWO emails: owner and auto-reply to user
+  orderForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    orderStatus.style.color = 'var(--muted)'; orderStatus.textContent = 'Sending order...';
+
+    const name = document.getElementById('o_name').value.trim();
+    const phone = document.getElementById('o_phone').value.trim();
+    const email = document.getElementById('o_email').value.trim();
+    const product = document.getElementById('o_product').value;
+    const qty = document.getElementById('o_qty').value;
+    const budget = document.getElementById('o_budget').value.trim();
+    const message = document.getElementById('o_msg').value.trim();
+    const productImg = document.getElementById('o_product_img').value;
+
+    if(!name||!phone||!email||!message||!budget){
+      orderStatus.style.color = '#ff8b8b'; orderStatus.textContent = 'Please fill all required fields.'; return;
+    }
+    // emailjs.send("service_2zc0gci","template_dhjmzg8"
+
+
+    // Template params for OWNER email
+    const ownerParams = {
+      user_name: name,
+      user_email: email,
+      user_phone: phone,
+      product_title: product,
+      product_image: productImg,
+      quantity: qty,
+      user_budget: budget,
+      message: message,
+      site: 'Surprise'
+    };
+
+    // Template params for USER auto-reply
+    const userParams = {
+      user_name: name,
+      user_email: email,
+      product_title: product,
+      site: 'Surprise',
+      reply_message: `Thanks ${name}! We received your order for "${product}". We'll review and contact you shortly.`
+    };
+
+    // show loading UI and simulate progress while sending
+    showLoading();
+    let progress = 6;
+    setProgress(progress);
+
+    // progress simulation interval (stops at 94% and waits for real result)
+    const progInterval = setInterval(()=>{
+      if(progress < 94){
+        progress += Math.random() * 7; // random progress bump
+        if(progress > 94) progress = 94;
+        setProgress(progress);
+      }
+    }, 350);
+
+    // Send owner email first (keeps your EmailJS config & templates)
+    emailjs.send("service_2zc0gci","template_569bbku", ownerParams)
+      .then((res) => {
+        // then send auto-reply to user
+        emailjs.send("service_2zc0gci", "template_dhjmzg8", userParams)
+          .then((res2) => {
+            clearInterval(progInterval);
+            setProgress(100);
+            setTimeout(()=> {
+              showSuccessBox();
+              // small delay before hiding loading and showing toast
+              setTimeout(()=>{
+                hideLoading();
+                // show toast message exactly as you requested
+                showToastAndAutoHide();
+                orderStatus.style.color = '#9ff2b0';
+                orderStatus.textContent = 'Order sent — owner & confirmation email delivered. Thank you!';
+                // close modal gracefully and reset form
+                setTimeout(()=> { closeOrderModal(); orderForm.reset(); }, 900);
+              }, 650);
+            }, 250);
+          })
+          .catch((err2) => {
+            console.error('EmailJS user send error', err2);
+            clearInterval(progInterval);
+            setProgress(100);
+            setTimeout(()=> {
+              showSuccessBox();
+              hideLoading();
+              orderStatus.style.color = '#ff8b8b';
+              orderStatus.textContent = 'Order sent to owner, but confirmation email failed.';
+              setTimeout(()=> { closeOrderModal(); orderForm.reset(); }, 900);
+            }, 350);
+          });
+      })
+      .catch((err) => {
+        console.error('EmailJS owner send error', err);
+        clearInterval(progInterval);
+        setProgress(100);
+        setTimeout(()=> {
+          hideLoading();
+          orderStatus.style.color = '#ff8b8b';
+          orderStatus.textContent = 'Failed to send order. Try again later.';
+        }, 300);
+      });
+  });
+
+  // Smooth scroll helper
+  function scrollToId(id){ const el=document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // Extra safety closeMobile helper
+  // (already defined above, but ensure available)
+  function closeMobile(){ if(document.getElementById('mobileNav')) document.getElementById('mobileNav').style.display='none'; }
+
+  // Fade-in/out backgrounds on scroll using IntersectionObserver
+  (function sectionFadeObserver(){
+    const sections = document.querySelectorAll('section.section, section');
+    const opts = { root: null, rootMargin: '0px', threshold: [0.25, 0.45, 0.6] };
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.intersectionRatio >= 0.35){
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, opts);
+    sections.forEach(s => obs.observe(s));
+    // ensure the topmost section visible on load
+    window.addEventListener('load', ()=> {
+      sections.forEach(s => {
+        // if section in viewport initially mark visible
+        const rect = s.getBoundingClientRect();
+        if(rect.top < window.innerHeight && rect.bottom > 0) s.classList.add('visible');
+      });
+    });
+  })();
+
+  // remove any remaining references to floating decos (defensive)
+  try { document.querySelectorAll('.float-deco, .fall-piece').forEach(n => n?.remove()); } catch(e){/* ignore */ }
+
+  // mobile perf: hide heavy elements on small screens
+  if(window.innerWidth < 520) {
+    document.querySelectorAll('.float-deco').forEach(n=>n.style.display='none');
+  }
+</script>
+
+</body>
+</html>
+
+
