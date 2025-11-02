@@ -133,8 +133,24 @@
   .small-muted{color:var(--muted);font-size:13px}
 
   /* === Modal (order) === */
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:600;visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
-  .modal.show{visibility:visible;opacity:1}
+ .modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none; /* prevents blocking clicks */
+  transition: opacity .18s, visibility .18s;
+}
+.modal.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto; /* clickable only when visible */
+}
   .modal-card{width:min(760px,calc(100% - 28px));background:#0b0b0b;padding:16px;border-radius:12px;box-shadow:0 30px 70px rgba(0,0,0,0.7)}
   .modal h3{margin:0 0 8px}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -156,6 +172,56 @@
     max-width: 420px;
     margin: 0 auto;
   }
+/* --- Mobile Fixes for Order Form --- */
+@media (max-width: 768px) {
+  /* Centers the form in the middle of the screen */
+  .order-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 15px;
+  }
+
+  .order-form-card {
+    width: 90%;
+    max-width: 320px;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 14px;
+    transform: scale(0.95);
+    max-height: 80vh; /* limit form height */
+    overflow-y: auto; /* scrollable if too long */
+    background: rgba(59, 52, 52, 0.95); /* optional: soft white background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .order-form-card input,
+  .order-form-card select,
+  .order-form-card textarea {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .order-form-card button {
+    font-size: 13px;
+    padding: 8px 12px;
+    width: 100%; /* makes buttons easy to tap */
+    border-radius: 6px;
+  }
+
+  .order-form-card button:active {
+    transform: scale(0.98); /* tap feedback */
+  }
+}
+
+.order-form-card,
+.order-form-card * {
+  position: relative;
+  z-index: 5;
+}
+
+
   .order-form-card input, .order-form-card textarea, .order-form-card select {
     width:100%; margin-top:12px; padding:10px; border-radius:8px; border:1px solid #1760f4; font-size:15px;
   }
@@ -402,7 +468,7 @@ We blend timeless design with modern sophistication, ensuring every detail refle
         <div class="gallery-grid">
           <div class="product" data-title="Premium Armchair" data-img="Image/ai chair.jpg">
             <img src="Image/ai chair.jpg" alt="Premium Armchair">
-            <div class="prod-label">Premium Armchair</div>
+            <div class="prod-label">Armchair</div>
             <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
           </div>
           <div class="product" data-title="Dining Chair Set" data-img="Image/set 2.jpg">
@@ -424,7 +490,7 @@ We blend timeless design with modern sophistication, ensuring every detail refle
         <div class="gallery-grid">
           <div class="product" data-title="Dining Table (6-seater)" data-img="Image/Dining Design.jpg">
             <img src="Image/Dining Design.jpg" alt="Dining Table">
-            <div class="prod-label">Dining Table (6-seater)</div>
+            <div class="prod-label">Dining Table</div>
             <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
           </div>
           <div class="product" data-title="Coffee Table" data-img="Image/coffee.jpg">
@@ -434,7 +500,7 @@ We blend timeless design with modern sophistication, ensuring every detail refle
           </div>
           <div class="product" data-title="Console Table" data-img="Image/console 2.jpg">
             <img src="Image/console 2.jpg" alt="Console Table">
-            <div class="prod-label">Console Table</div>
+            <div class="prod-label">ConsoleTable</div>
             <div class="prod-actions"><button class="order-btn" onclick="openOrderModal(this)">Order</button></div>
           </div>
         </div>
@@ -499,7 +565,7 @@ We blend timeless design with modern sophistication, ensuring every detail refle
       <div class="contact-card">
           <div class="contact-info">
   <p><a href="mailto:sharafadeendamilare@gmail.com"><i class="fas fa-envelope"></i> contact@yourcompany.com</a></p>
-  <p> <a href="tell:+2349034214191"><i class="fas fa-phone"></i> 09034214191</p></a><br></br>
+  <p> <a href="tell:9034214191"><i class="fas fa-phone"></i> 09034214191</p></a><br></br>
 
           <h3>Company Name</h3>
           <p style="font-weight:700">Surprise Furniture & Exterior Decor</p><br></br>
@@ -835,6 +901,54 @@ We blend timeless design with modern sophistication, ensuring every detail refle
   if(window.innerWidth < 520) {
     document.querySelectorAll('.float-deco').forEach(n=>n.style.display='none');
   }
+
+
+    function openOrderModal(btn) {
+    const modal = document.getElementById('orderModal');
+    if (modal) {
+      modal.classList.add('show');
+      modal.style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.classList.add('modal-open');
+    }
+  }
+
+  // ✅ CLOSE ORDER FORM MODAL
+  function closeOrderModal() {
+    const modal = document.getElementById('orderModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+    }
+  }
+
+  // ✅ SMOOTH SCROLL FUNCTION (for “See More” buttons etc.)
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // ✅ MOBILE MENU CLOSE HELPER (if you have mobile nav)
+  function closeMobile() {
+    const nav = document.getElementById('mobileNav');
+    if (nav) nav.style.display = 'none';
+  }
+
+  // ✅ SIMPLE FADE-IN EFFECT ON SCROLL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+      else entry.target.classList.remove('visible');
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('section, .item').forEach(el => observer.observe(el));
+
+  // ✅ FIX: allow modal buttons (“Send” & “Cancel”) to be clickable anytime
+  document.addEventListener('touchmove', () => {}, { passive: true });
+</script>
 </script>
 
 </body>
